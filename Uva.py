@@ -54,7 +54,7 @@ for tr in trs:
 conn = sqlite3.connect('Uva.sqlite')
 cursor = conn.cursor()
 
-sqlstr = 'CREATE TABLE IF NOT EXISTS uva_topics("id"INTEGER PRIMARY KEY NOT NULL,"serial" INTEGER NOT NULL ,"title" TEXT NOT NULL,"topic_url" TEXT NOT NULL,"star" INTEGER)'
+sqlstr = 'CREATE TABLE IF NOT EXISTS uva_topics("id"INTEGER PRIMARY KEY NOT NULL,"serial" INTEGER NOT NULL ,"title" TEXT NOT NULL,"show" TEXT NOT NULL,"topic_url" TEXT NOT NULL,"star" INTEGER)'
 cursor.execute(sqlstr)
 
 for title in titles:
@@ -68,6 +68,8 @@ for title in titles:
         substring = 3
     serial = a[0]
 
+    show = a[0]+" - "+a[1]
+
     website = "https://onlinejudge.org/external/" + \
         serial[:substring]+"/"+a[0]+".pdf"
     try:
@@ -75,7 +77,7 @@ for title in titles:
     except KeyError:
         star = None
     cursor.execute(
-        "insert into uva_topics (serial,title,topic_url,star) values (?,?,?,?)", (a[0], a[1], website, star))
+        "insert into uva_topics (serial,title,show,topic_url,star) values (?,?,?,?,?)", (a[0], a[1], show, website, star))
 
 conn.commit()
 conn.close()
